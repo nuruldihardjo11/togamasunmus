@@ -13,41 +13,52 @@
 <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
 <style>
-/* =========================================================
-   PALET: PUTIH + BIRU. BORDER 1px, TANPA SHADOW TEBAL
-   ========================================================= */
 :root{
-  --white:#FFFFFF;
-  --blue:#007BFF;
-  --blue-dark:#0056B3;
-  --blue-deep:#003D82;
-  --blue-soft:#EAF3FF;
-  --blue-tint:#F5FAFF;
-  --bg:#FFFFFF;
-  --bg-soft:#F7FAFF;
-  --card:#FFFFFF;
-  --text:#0A2540;
-  --text-2:#5A7A99;
-  --border:#E5E7EB;
-  --bc:#0A2540;
-  --shadow:none;
-  --radius:16px;
+  --white:#FFFFFF;--blue:#007BFF;--blue-dark:#0056B3;--blue-deep:#003D82;
+  --blue-soft:#EAF3FF;--blue-tint:#F5FAFF;--bg:#FFFFFF;--bg-soft:#F7FAFF;
+  --card:#FFFFFF;--text:#0A2540;--text-2:#5A7A99;--border:#E5E7EB;
+  --bc:#0A2540;--shadow:none;--radius:16px;
 }
 [data-theme="dark"]{
-  --bg:#061527; --bg-soft:#0B1E33; --card:#0C2138;
-  --text:#EAF2FB; --text-2:#93AEC8; --border:#1B3550;
-  --blue:#3D9BFF; --blue-dark:#6BB4FF; --blue-soft:#10294A; --blue-tint:#0E2540;
-  --bc:#EAF2FB; --shadow:none;
+  --bg:#061527;--bg-soft:#0B1E33;--card:#0C2138;--text:#EAF2FB;--text-2:#93AEC8;
+  --border:#1B3550;--blue:#3D9BFF;--blue-dark:#6BB4FF;--blue-soft:#10294A;--blue-tint:#0E2540;
+  --bc:#EAF2FB;--shadow:none;
 }
 *{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth}
 body{font-family:'Inter',system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--text);line-height:1.6;transition:background .25s,color .25s}
-button,input,select{font-family:inherit}
+button,input,select,textarea{font-family:inherit}
 ::-webkit-scrollbar{width:8px;height:8px}
 ::-webkit-scrollbar-track{background:var(--bg-soft)}
 ::-webkit-scrollbar-thumb{background:var(--blue);border-radius:4px}
 
-/* ===================== NAVIGASI ===================== */
+body.nav-locked .nav-restricted{display:none!important}
+
+/* ============ HALAMAN UPLOAD PELANGGAN (mode=print) ============ */
+#guestPrintPage{display:none;min-height:100vh;background:linear-gradient(180deg,var(--blue-soft),var(--bg));padding:1.5rem 1rem}
+#guestPrintPage.show{display:block}
+.guest-card{max-width:520px;margin:0 auto;background:var(--card);border:1px solid var(--border);border-radius:18px;padding:1.8rem 1.4rem;box-shadow:0 10px 30px rgba(0,123,255,.12)}
+.guest-card h1{font-size:1.4rem;font-weight:800;color:var(--blue);margin-bottom:.3rem}
+.guest-card .sub{color:var(--text-2);font-size:.9rem;margin-bottom:1.2rem}
+.upload-zone{border:2px dashed var(--blue);border-radius:14px;padding:1.5rem;text-align:center;background:var(--blue-tint);cursor:pointer;transition:.2s}
+.upload-zone:hover{background:var(--blue-soft)}
+.upload-zone .big{font-size:2.2rem;color:var(--blue);font-weight:800}
+.upload-zone p{color:var(--text-2);font-size:.85rem;margin-top:.4rem}
+.upload-zone input[type=file]{display:none}
+.file-chip{display:flex;align-items:center;gap:.6rem;background:var(--blue-soft);border:1px solid var(--blue);border-radius:10px;padding:.6rem .8rem;margin-top:.8rem;font-size:.85rem}
+.file-chip .fn{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:700}
+.file-chip .fs{color:var(--text-2);font-size:.78rem}
+.file-chip button{background:none;border:none;color:var(--blue);font-weight:800;cursor:pointer;font-size:.85rem}
+.guest-field{margin-top:.9rem}
+.guest-field label{display:block;font-size:.78rem;font-weight:700;color:var(--text-2);text-transform:uppercase;letter-spacing:.03em;margin-bottom:.3rem}
+.guest-field input,.guest-field select,.guest-field textarea{width:100%;padding:.7rem .85rem;border:1px solid var(--border);border-radius:11px;background:var(--card);color:var(--text);font-size:.9rem}
+.guest-field textarea{min-height:70px;resize:vertical}
+.guest-field input:focus,.guest-field select:focus,.guest-field textarea:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px rgba(0,123,255,.12)}
+.guest-note{font-size:.78rem;color:var(--text-2);margin-top:.8rem;text-align:center}
+.guest-ok{text-align:center;padding:1.5rem 1rem}
+.guest-ok .big-ok{font-size:3rem;color:var(--blue);font-weight:800}
+
+/* ============ NAVIGASI ============ */
 .navbar{background:var(--white);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:1000}
 [data-theme="dark"] .navbar{background:var(--card)}
 .nav-container{max-width:1400px;margin:0 auto;padding:.7rem 1.25rem;display:flex;align-items:center;justify-content:space-between;gap:.75rem}
@@ -63,8 +74,14 @@ button,input,select{font-family:inherit}
 .theme-toggle,.hamburger{background:var(--bg-soft);border:1px solid var(--border);color:var(--text);height:38px;border-radius:10px;cursor:pointer;font-size:.8rem;font-weight:700}
 .theme-toggle{width:78px}
 .hamburger{display:none;width:44px;font-size:1.2rem}
+.db-chip{padding:.4rem .75rem;border:1px solid var(--border);border-radius:999px;font-size:.78rem;font-weight:700;color:var(--text-2);background:var(--bg-soft);white-space:nowrap}
+.db-chip.on{color:var(--blue-dark);border-color:var(--blue);background:var(--blue-soft)}
+.db-chip.off{color:#B4232A;border-color:#B4232A;background:#FDECEC}
+[data-theme="dark"] .db-chip.on{background:#10294A;color:#8CC4FF}
+[data-theme="dark"] .db-chip.off{background:#3A1518;color:#FCA5A5}
+.badge-notif{background:var(--blue);color:#fff;font-size:.68rem;font-weight:800;padding:.1rem .45rem;border-radius:999px;margin-left:.3rem}
 
-/* ===================== LAYOUT ===================== */
+/* ============ LAYOUT ============ */
 .main-content{max-width:1400px;margin:0 auto;padding:1.5rem 1.25rem 2rem}
 .page{display:none}
 .page.active{display:block;animation:fade .3s ease}
@@ -74,7 +91,7 @@ button,input,select{font-family:inherit}
 .card-title::before{content:"";width:5px;height:22px;border-radius:3px;background:var(--text)}
 .card-sub{font-size:.86rem;color:var(--text-2);margin-bottom:1.1rem}
 
-/* ===================== TOMBOL ===================== */
+/* ============ TOMBOL ============ */
 .btn{padding:.75rem 1.3rem;border:none;border-radius:11px;font-weight:700;cursor:pointer;font-size:.9rem;transition:.18s;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;gap:.4rem}
 .btn:hover{transform:translateY(-1px)}
 .btn:active{transform:translateY(0)}
@@ -87,15 +104,16 @@ button,input,select{font-family:inherit}
 .btn-ghost:hover{border-color:var(--blue);color:var(--blue)}
 .btn-sm{padding:.42rem .72rem;font-size:.78rem;border-radius:9px}
 .btn-block{width:100%}
+.btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
 
-/* ===================== BERANDA ===================== */
+/* ============ BERANDA ============ */
 .hero{background:radial-gradient(800px 300px at 90% -20%,rgba(0,123,255,.10),transparent 60%),var(--card);border:1px solid var(--border);border-radius:22px;padding:3rem 2rem;text-align:center;margin-bottom:1.5rem;box-shadow:var(--shadow)}
 .hero h1{font-size:clamp(1.6rem,4.5vw,2.5rem);font-weight:800;letter-spacing:-.02em;color:var(--text);margin-bottom:.5rem}
 .hero .lead{color:var(--text-2);max-width:660px;margin:0 auto .4rem;font-size:1rem}
 .hero .slogan{font-style:italic;color:var(--text-2);font-weight:600;margin-bottom:1.6rem}
 .hero-buttons{display:flex;gap:.8rem;justify-content:center;flex-wrap:wrap}
 
-/* ===================== KASIR ===================== */
+/* ============ KASIR ============ */
 .split{display:grid;grid-template-columns:1.05fr .95fr;gap:1.25rem}
 .split-2{display:grid;grid-template-columns:1fr 1fr;gap:1.25rem}
 .scan-box{background:var(--blue-tint);border:2px dashed var(--blue);border-radius:14px;padding:1rem;margin-bottom:1rem}
@@ -136,7 +154,7 @@ img.qr,canvas.qr{display:block;margin:0 auto;background:#fff;border-radius:4px;m
 [data-theme="dark"] .bc-box{background:#FFFFFF;border-color:#FFFFFF}
 .bc-box svg,.bc-box img{max-width:100%}
 
-/* ===================== KAMERA ===================== */
+/* ============ KAMERA ============ */
 .reader-wrap{background:var(--white);border:1px solid var(--border);border-radius:12px;overflow:hidden;padding:6px}
 #reader{width:100%}
 #reader video{width:100%;border-radius:10px;display:block}
@@ -147,7 +165,22 @@ img.qr,canvas.qr{display:block;margin:0 auto;background:#fff;border-radius:4px;m
 .scan-note.err{color:var(--blue-deep);font-weight:700}
 [data-theme="dark"] .scan-note.err{color:var(--blue-dark)}
 
-/* ===================== LAPORAN ===================== */
+/* ============ ANTRIAN PRINT ============ */
+.print-card{border:1px solid var(--border);border-left:4px solid var(--blue);border-radius:12px;padding:.9rem 1rem;margin-bottom:.7rem;background:var(--card);display:grid;grid-template-columns:auto 1fr auto;gap:.8rem;align-items:center}
+.print-card.selesai{border-left-color:var(--blue-dark);opacity:.75}
+.print-card.diproses{border-left-color:var(--blue)}
+.print-ico{width:42px;height:42px;border-radius:10px;background:var(--blue-soft);color:var(--blue);display:grid;place-items:center;font-weight:800;font-size:.75rem;flex:none}
+.print-info .fn{font-weight:700;font-size:.92rem}
+.print-info .meta{font-size:.76rem;color:var(--text-2);margin-top:.15rem}
+.print-info .cat{font-size:.72rem;color:var(--blue-dark);font-weight:700;margin-top:.2rem}
+.print-acts{display:flex;flex-direction:column;gap:.35rem;align-items:flex-end}
+.status-pill{padding:.2rem .6rem;border-radius:999px;font-size:.7rem;font-weight:800;text-transform:uppercase;letter-spacing:.04em}
+.status-Menunggu{background:#FBF3DC;color:#8A5A00}
+.status-Diproses{background:var(--blue-soft);color:var(--blue-dark)}
+.status-Selesai{background:var(--blue);color:#fff}
+.status-Dibatalkan{background:#FDECEC;color:#B4232A}
+
+/* ============ LAPORAN ============ */
 .stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(195px,1fr));gap:1rem;margin-bottom:1.25rem}
 .stat{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:1.15rem;box-shadow:var(--shadow);position:relative;overflow:hidden;transition:.2s}
 .stat:hover{transform:translateY(-2px);border-color:var(--blue)}
@@ -161,7 +194,7 @@ img.qr,canvas.qr{display:block;margin:0 auto;background:#fff;border-radius:4px;m
 .bar-row .vv{width:118px;text-align:right;font-size:.83rem;font-weight:700;flex:none}
 .chart-box{position:relative;height:300px}
 
-/* ===================== DSS ===================== */
+/* ============ DSS ============ */
 .rank{list-style:none}
 .rank li{display:flex;align-items:center;gap:.9rem;padding:.75rem .4rem;border-bottom:1px solid var(--border)}
 .rank li:last-child{border-bottom:none}
@@ -185,7 +218,7 @@ img.qr,canvas.qr{display:block;margin:0 auto;background:#fff;border-radius:4px;m
 .reco .d{font-size:.8rem;color:var(--text-2);margin-top:.15rem}
 .reco .s{font-weight:700;color:var(--text);font-size:.88rem;margin-top:.3rem}
 
-/* ===================== TABEL DATA BARANG ===================== */
+/* ============ TABEL DATA BARANG ============ */
 .table-wrap{overflow-x:auto;border:1px solid var(--border);border-radius:12px}
 .data-table{width:100%;border-collapse:collapse;font-size:.85rem;min-width:900px}
 .data-table th,.data-table td{padding:.7rem .75rem;text-align:left;border-bottom:1px solid var(--border)}
@@ -198,7 +231,6 @@ img.qr,canvas.qr{display:block;margin:0 auto;background:#fff;border-radius:4px;m
 .s-out{background:var(--blue-deep);color:#fff}
 [data-theme="dark"] .s-ok{color:var(--blue-dark)}
 [data-theme="dark"] .s-low{background:transparent;color:var(--text-2)}
-/* Badge kategori tint lembut */
 .badge{display:inline-block;padding:.24rem .7rem;border-radius:999px;font-size:.68rem;font-weight:800;letter-spacing:.03em}
 .b-Minuman{background:#E8F1FD;color:#0B5CAD}
 .b-Makanan{background:#FDECEC;color:#B4232A}
@@ -216,7 +248,7 @@ img.qr,canvas.qr{display:block;margin:0 auto;background:#fff;border-radius:4px;m
 .code-field{display:flex;gap:.4rem}
 .code-field input{flex:1;min-width:0}
 
-/* ===================== PROFIL ===================== */
+/* ============ PROFIL ============ */
 .team-head{text-align:center;margin-bottom:1.6rem}
 .team-head h2{font-size:clamp(1.5rem,4vw,2.1rem);font-weight:800;letter-spacing:.05em;color:var(--text)}
 .team-head p{color:var(--text-2);font-size:.92rem}
@@ -229,11 +261,10 @@ img.qr,canvas.qr{display:block;margin:0 auto;background:#fff;border-radius:4px;m
 .team-card:nth-child(3n) .avatar{background:var(--blue)}
 .member-name{font-weight:700;font-size:.98rem;line-height:1.35}
 .member-npm{color:var(--text-2);font-size:.83rem;font-family:monospace;margin-top:.25rem}
-/* Label peran diletakkan di pojok kanan kartu */
 .member-role{position:absolute;top:12px;right:12px;background:var(--blue-soft);color:var(--blue-dark);padding:.22rem .72rem;border-radius:999px;font-size:.7rem;font-weight:800}
 [data-theme="dark"] .member-role{color:var(--blue-dark)}
 
-/* ===================== MODAL & CETAK ===================== */
+/* ============ MODAL & CETAK ============ */
 .overlay{display:none;position:fixed;inset:0;background:rgba(10,37,64,.6);backdrop-filter:blur(3px);z-index:2000;align-items:center;justify-content:center;padding:1rem}
 .overlay.on{display:flex;animation:fade .2s}
 .modal{background:var(--card);border-radius:18px;padding:1.6rem;max-width:560px;width:100%;max-height:90vh;overflow-y:auto;border:1px solid var(--border);box-shadow:0 24px 60px rgba(0,0,0,.3)}
@@ -269,6 +300,8 @@ img.qr,canvas.qr{display:block;margin:0 auto;background:#fff;border-radius:4px;m
   .theme-toggle{width:100%}
   .sheet-labels{grid-template-columns:repeat(2,1fr)}
   .bar-row .nm{width:86px}.bar-row .vv{width:96px;font-size:.76rem}
+  .print-card{grid-template-columns:1fr}
+  .print-acts{flex-direction:row;align-items:center}
 }
 @media (max-width:520px){
   .main-content{padding:1rem .8rem 1.5rem}
@@ -278,10 +311,54 @@ img.qr,canvas.qr{display:block;margin:0 auto;background:#fff;border-radius:4px;m
 }
 </style>
 </head>
-<body>
+<body class="nav-locked">
 
-<!-- ===================== NAVIGASI ===================== -->
-<nav class="navbar">
+<!-- ===================== HALAMAN UPLOAD PELANGGAN (mode=print) ===================== -->
+<div id="guestPrintPage">
+  <div class="guest-card" id="guestFormCard">
+    <h1>Kirim File Print</h1>
+    <p class="sub">TOGA MAS UNMUS MERAUKE - Upload file Anda, kami akan mencetakkan.</p>
+
+    <label class="upload-zone" for="guestFile">
+      <div class="big">+</div>
+      <p><strong>Pilih file</strong> (PDF, Word, atau gambar)</p>
+      <p>Maksimal 10 MB per file</p>
+      <input type="file" id="guestFile" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.heic,.webp">
+    </label>
+    <div id="guestFileChip" style="display:none" class="file-chip">
+      <span class="fn" id="guestFileName">-</span>
+      <span class="fs" id="guestFileSize">-</span>
+      <button type="button" onclick="clearGuestFile()">Hapus</button>
+    </div>
+
+    <div class="guest-field">
+      <label>Nama Anda (opsional)</label>
+      <input type="text" id="guestNama" placeholder="Contoh: Budi">
+    </div>
+    <div class="guest-field">
+      <label>Jumlah Copy</label>
+      <input type="number" id="guestJumlah" min="1" value="1">
+    </div>
+    <div class="guest-field">
+      <label>Catatan (opsional)</label>
+      <textarea id="guestCatatan" placeholder="Contoh: cetak warna, dijilid, dll (maks 200 karakter)"></textarea>
+    </div>
+
+    <button class="btn btn-blue btn-block" style="margin-top:1.1rem" onclick="submitGuestPrint()" id="btnGuestSend">Kirim File</button>
+    <p class="guest-note">File akan masuk ke antrian kasir Toga Mas. Tunjukkan ID antrian saat mengambil hasil cetak.</p>
+  </div>
+
+  <div class="guest-card guest-ok" id="guestOkCard" style="display:none">
+    <div class="big-ok">OK</div>
+    <h1 style="margin-top:.5rem">File Berhasil Dikirim</h1>
+    <p class="sub" id="guestOkId">ID Antrian: -</p>
+    <p class="sub">Tunjukkan ID antrian ini saat mengambil hasil cetak di kasir Toga Mas.</p>
+    <button class="btn btn-outline btn-block" onclick="location.reload()">Kirim File Lain</button>
+  </div>
+</div>
+
+<!-- ===================== NAVIGASI KASIR ===================== -->
+<nav class="navbar" id="mainNav">
   <div class="nav-container">
     <div class="nav-brand">
       <div class="logo-mark">TM<small>UNMUS</small></div>
@@ -292,18 +369,19 @@ img.qr,canvas.qr{display:block;margin:0 auto;background:#fff;border-radius:4px;m
     </div>
     <button class="hamburger" onclick="toggleNav()" aria-label="Menu">&#9776;</button>
     <div class="nav-links" id="navLinks">
-      <a href="#" data-page="beranda" class="active" onclick="go('beranda');return false">Beranda</a>
-      <a href="#" data-page="kasir" onclick="go('kasir');return false">Kasir</a>
-      <a href="#" data-page="laporan" onclick="go('laporan');return false">Laporan</a>
-      <a href="#" data-page="dss" onclick="go('dss');return false">DSS</a>
-      <a href="#" data-page="databarang" onclick="go('databarang');return false">Data Barang</a>
-      <a href="#" data-page="profil" onclick="go('profil');return false">Profil Pembuat</a>
+      <a href="#" data-page="kasir" class="nav-restricted" onclick="go('kasir');return false">Kasir</a>
+      <a href="#" data-page="antrian" class="nav-restricted" onclick="go('antrian');return false">Antrian Print <span class="badge-notif" id="antrianBadge" style="display:none">0</span></a>
+      <a href="#" data-page="laporan" class="nav-restricted" onclick="go('laporan');return false">Laporan</a>
+      <a href="#" data-page="dss" class="nav-restricted" onclick="go('dss');return false">DSS</a>
+      <a href="#" data-page="databarang" class="nav-restricted" onclick="go('databarang');return false">Data Barang</a>
+      <a href="#" data-page="profil" class="nav-restricted" onclick="go('profil');return false">Profil Pembuat</a>
+      <span class="db-chip nav-restricted" id="dbStatus" title="Status database">DB: Lokal</span>
       <button class="theme-toggle" id="themeBtn" onclick="toggleTheme()">Mode Gelap</button>
     </div>
   </div>
 </nav>
 
-<div class="main-content">
+<div class="main-content" id="mainContent">
 
   <!-- ============ 1. BERANDA ============ -->
   <section class="page active" id="page-beranda">
@@ -312,7 +390,7 @@ img.qr,canvas.qr{display:block;margin:0 auto;background:#fff;border-radius:4px;m
       <p class="lead">Sistem Digital Photocopy Toga Mas. Pencatatan kasir, pemantauan stok, laporan harian, serta barcode dan QR Code barang dalam satu halaman.</p>
       <p class="slogan">Fotokopi Cepat, ATK Lengkap, Harga Mahasiswa</p>
       <div class="hero-buttons">
-        <button class="btn btn-outline" onclick="go('kasir')">Masuk Kasir</button>
+        <button class="btn btn-blue" onclick="masukKasir()">Masuk Kasir</button>
       </div>
     </div>
   </section>
@@ -365,7 +443,22 @@ img.qr,canvas.qr{display:block;margin:0 auto;background:#fff;border-radius:4px;m
     </div>
   </section>
 
-  <!-- ============ 3. LAPORAN HARIAN (MIS) ============ -->
+  <!-- ============ 3. ANTRIAN PRINT ============ -->
+  <section class="page" id="page-antrian">
+    <div class="card">
+      <div class="card-title">Antrian Print Pelanggan</div>
+      <p class="card-sub">File yang dikirim pelanggan via QR Code akan muncul di sini. Kasir dapat membuka file, mencetak, dan menandai status.</p>
+
+      <div style="display:flex;gap:.6rem;flex-wrap:wrap;margin-bottom:1.1rem">
+        <button class="btn btn-blue" onclick="loadAntrian()">Muat Ulang</button>
+        <button class="btn btn-outline" onclick="copyPrintQr()">Salin Link QR Print</button>
+      </div>
+
+      <div id="antrianList"></div>
+    </div>
+  </section>
+
+  <!-- ============ 4. LAPORAN HARIAN (MIS) ============ -->
   <section class="page" id="page-laporan">
     <div class="card">
       <div class="card-title">Laporan Harian - MIS</div>
@@ -390,14 +483,13 @@ img.qr,canvas.qr{display:block;margin:0 auto;background:#fff;border-radius:4px;m
       </div>
 
       <div style="display:flex;gap:.6rem;margin-top:1.2rem;flex-wrap:wrap">
-        <!-- Tombol Reset: menghapus laporan harian yang sudah ada agar laporan mulai dari awal -->
         <button class="btn btn-deep" onclick="resetLaporan()">Reset</button>
         <button class="btn btn-outline" onclick="exportCSV()">Ekspor CSV</button>
       </div>
     </div>
   </section>
 
-  <!-- ============ 4. DSS ============ -->
+  <!-- ============ 5. DSS ============ -->
   <section class="page" id="page-dss">
     <div class="card">
       <div class="card-title">Barang Terlaris dan Rekomendasi Restock - DSS</div>
@@ -421,11 +513,11 @@ img.qr,canvas.qr{display:block;margin:0 auto;background:#fff;border-radius:4px;m
     </div>
   </section>
 
-  <!-- ============ 5. DATA BARANG ============ -->
+  <!-- ============ 6. DATA BARANG ============ -->
   <section class="page" id="page-databarang">
     <div class="card">
       <div class="card-title">Kelola Data Barang</div>
-      <p class="card-sub">Tambah, ubah, dan hapus barang berupa kode, nama, kategori, harga satuan, dan stok. Nomor barcode atau QR Code dapat diganti maupun diketik manual pada setiap item.</p>
+      <p class="card-sub">Tambah, ubah, dan hapus barang. Nomor barcode atau QR Code dapat diganti maupun diketik manual.</p>
       <div style="display:flex;gap:.6rem;flex-wrap:wrap;margin-bottom:1.1rem">
         <button class="btn btn-blue" onclick="openBarangModal()">Tambah Barang</button>
         <button class="btn btn-outline" onclick="printAllLabels()">Cetak Semua Label</button>
@@ -440,7 +532,7 @@ img.qr,canvas.qr{display:block;margin:0 auto;background:#fff;border-radius:4px;m
     </div>
   </section>
 
-  <!-- ============ 6. PROFIL PEMBUAT ============ -->
+  <!-- ============ 7. PROFIL PEMBUAT ============ -->
   <section class="page" id="page-profil">
     <div class="card">
       <div class="team-head">
@@ -497,10 +589,10 @@ img.qr,canvas.qr{display:block;margin:0 auto;background:#fff;border-radius:4px;m
 <div class="overlay" id="scanModal">
   <div class="modal">
     <h3>Pemindai Kamera</h3>
-    <p class="card-sub" style="margin-bottom:.8rem">Arahkan kamera ke barcode atau QR Code pada kemasan barang maupun label rak. Hasil pemindaian otomatis masuk ke keranjang kasir.</p>
+    <p class="card-sub" style="margin-bottom:.8rem">Arahkan kamera ke barcode atau QR Code pada kemasan barang maupun label rak.</p>
     <div class="reader-wrap"><div id="reader"></div></div>
     <p class="scan-note err" id="camErr"></p>
-    <p class="scan-note">Catatan: akses kamera hanya berfungsi bila halaman dibuka melalui https atau localhost, dan izin kamera telah diberikan oleh browser.</p>
+    <p class="scan-note">Akses kamera hanya berfungsi via https atau localhost.</p>
     <div class="modal-foot">
       <button class="btn btn-blue" onclick="startCam()">Mulai Ulang</button>
       <button class="btn btn-outline" onclick="switchCam()">Ganti Kamera</button>
@@ -509,7 +601,7 @@ img.qr,canvas.qr{display:block;margin:0 auto;background:#fff;border-radius:4px;m
   </div>
 </div>
 
-<!-- ============ MODAL PRATINJAU CETAK ============ -->
+<!-- ============ MODAL CETAK ============ -->
 <div class="overlay" id="printModal">
   <div class="modal wide">
     <h3 id="printTitle">Pratinjau Cetak</h3>
@@ -521,10 +613,10 @@ img.qr,canvas.qr{display:block;margin:0 auto;background:#fff;border-radius:4px;m
   </div>
 </div>
 
-<footer class="footer">
+<footer class="footer" id="mainFooter">
   <b>TOGA MAS UNMUS MERAUKE</b>
   <p>Sistem Digital Photocopy Toga Mas - konsep TPS, MIS, dan DSS</p>
-  <p style="margin-top:.5rem">Dibuat oleh <a href="#" onclick="go('profil');return false">Kelompok 2</a> - Sistem Informasi Manajemen - Universitas Musamus Merauke</p>
+  <p style="margin-top:.5rem">Dibuat oleh <a href="#" onclick="masukKasir();go('profil');return false">Kelompok 2</a> - Sistem Informasi Manajemen - Universitas Musamus Merauke</p>
   <p style="margin-top:.5rem;font-size:.78rem;opacity:.75">2026</p>
 </footer>
 
@@ -533,9 +625,6 @@ img.qr,canvas.qr{display:block;margin:0 auto;background:#fff;border-radius:4px;m
 <script>
 /* =========================================================
    STRUKTUR DATA
-   barang           : kode, nama, kategori, harga, stok, barcode, tipeKode
-   transaksi        : id, tanggal, total, jam
-   detail_transaksi : id, id_transaksi, kode_barang, jumlah, harga, subtotal
    ========================================================= */
 const DEFAULT_BARANG = [
   {kode:'MIN001',nama:'Aqua 600ml',kategori:'Minuman',harga:5000,stok:48},
@@ -578,7 +667,6 @@ const DEFAULT_DETAIL = [
   {id:10,id_transaksi:'TRX005',kode_barang:'JSA002',jumlah:8 ,harga:1000,subtotal:8000},
   {id:11,id_transaksi:'TRX005',kode_barang:'MIN002',jumlah:1 ,harga:4000,subtotal:4000}
 ];
-/* Seluruh anggota berstatus Anggota */
 const TEAM = [
   {nama:'Nurul Rahma A. Diharjo',npm:'202557201030',role:'Anggota'},
   {nama:'Karmila',npm:'202557201012',role:'Anggota'},
@@ -588,7 +676,12 @@ const TEAM = [
   {nama:'Evandra Galang Syahputra',npm:'202557201058',role:'Anggota'}
 ];
 
-/* ===================== STATE ===================== */
+/* =========================================================
+   KONFIGURASI DATABASE & URL
+   ========================================================= */
+/* Isi SCRIPT_URL dengan URL Web App Apps Script Anda (berakhiran /exec). */
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz5FzcNlszVp9iS8F32DLOPvk1hxNeA6_r1dJppr5E9rXnMi-u7zGD29mgNmsoJmnotJA/exec';
+
 let barang = load('tm_barang') || structuredClone(DEFAULT_BARANG);
 let transaksi = load('tm_transaksi') || structuredClone(DEFAULT_TRX);
 let detailTransaksi = load('tm_detail') || structuredClone(DEFAULT_DETAIL);
@@ -596,15 +689,285 @@ let cart = [];
 let trxCounter = transaksi.reduce((m,t)=>Math.max(m,parseInt(t.id.replace(/\D/g,''))||0),0)+1;
 
 function load(k){ try{ const v=localStorage.getItem(k); return v?JSON.parse(v):null }catch(e){ return null } }
-function save(){
+function saveLocal(){
   localStorage.setItem('tm_barang',JSON.stringify(barang));
   localStorage.setItem('tm_transaksi',JSON.stringify(transaksi));
   localStorage.setItem('tm_detail',JSON.stringify(detailTransaksi));
 }
+function save(){ saveLocal(); sheetPush(); updateDbBadge(); }
 const rp = n => 'Rp ' + Number(n||0).toLocaleString('id-ID');
 const esc = s => String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 
-/* ===================== KODE: BARCODE & QR ===================== */
+/* =========================================================
+   DETEKSI MODE TAMU (mode=print di URL)
+   ========================================================= */
+(function detectMode(){
+  const params = new URLSearchParams(location.search);
+  if(params.get('mode') === 'print'){
+    document.getElementById('guestPrintPage').classList.add('show');
+    document.getElementById('mainNav').style.display = 'none';
+    document.getElementById('mainContent').style.display = 'none';
+    document.getElementById('mainFooter').style.display = 'none';
+    document.body.classList.remove('nav-locked');
+    document.title = 'Kirim File Print - TOGA MAS';
+  }
+})();
+
+/* =========================================================
+   UPLOAD FILE DARI PELANGGAN (mode=print)
+   ========================================================= */
+let guestFileObj = null;
+document.getElementById('guestFile').addEventListener('change', function(e){
+  const f = e.target.files[0];
+  if(!f){ clearGuestFile(); return; }
+  if(f.size > 10*1024*1024){ toast('Ukuran file maksimal 10 MB','err'); clearGuestFile(); return; }
+  guestFileObj = f;
+  document.getElementById('guestFileName').textContent = f.name;
+  document.getElementById('guestFileSize').textContent = (f.size/1024).toFixed(1)+' KB';
+  document.getElementById('guestFileChip').style.display = 'flex';
+});
+function clearGuestFile(){
+  guestFileObj = null;
+  document.getElementById('guestFile').value = '';
+  document.getElementById('guestFileChip').style.display = 'none';
+}
+function fileToBase64(file){
+  return new Promise(function(resolve,reject){
+    const r = new FileReader();
+    r.onload = function(){ resolve(r.result.split(',')[1]); };
+    r.onerror = reject;
+    r.readAsDataURL(file);
+  });
+}
+async function submitGuestPrint(){
+  if(!guestFileObj){ toast('Pilih file terlebih dahulu','err'); return; }
+  const btn = document.getElementById('btnGuestSend');
+  btn.disabled = true; btn.textContent = 'Mengirim...';
+  try{
+    const base64 = await fileToBase64(guestFileObj);
+    const payload = {
+      action: 'uploadPrint',
+      nama: document.getElementById('guestNama').value.trim() || 'Pelanggan',
+      jumlah: parseInt(document.getElementById('guestJumlah').value)||1,
+      catatan: document.getElementById('guestCatatan').value.trim(),
+      file: { name: guestFileObj.name, type: guestFileObj.type, base64: base64 }
+    };
+    if(SCRIPT_URL){
+      const res = await fetch(SCRIPT_URL,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(payload)}).then(r=>r.json());
+      if(res && res.ok){
+        document.getElementById('guestOkId').textContent = 'ID Antrian: '+res.id;
+        document.getElementById('guestFormCard').style.display = 'none';
+        document.getElementById('guestOkCard').style.display = 'block';
+        clearGuestFile();
+      }else{
+        throw new Error(res && res.error ? res.error : 'Gagal mengirim');
+      }
+    }else{
+      const id = 'PRT'+Date.now().toString().slice(-6);
+      const antrian = load('tm_antrian') || [];
+      antrian.push({
+        id:id, tanggal:TODAY, jam:new Date().toTimeString().slice(0,5),
+        nama_pelanggan:payload.nama, nama_file:payload.file.name, tipe_file:payload.file.type,
+        ukuran_kb:Math.round(guestFileObj.size/1024), jumlah_copy:payload.jumlah,
+        catatan:payload.catatan, status:'Menunggu', url_drive:'', file_id:'',
+        base64: base64
+      });
+      localStorage.setItem('tm_antrian', JSON.stringify(antrian));
+      document.getElementById('guestOkId').textContent = 'ID Antrian: '+id+' (mode demo)';
+      document.getElementById('guestFormCard').style.display = 'none';
+      document.getElementById('guestOkCard').style.display = 'block';
+      clearGuestFile();
+    }
+  }catch(err){
+    toast('Gagal mengirim: '+err.message,'err');
+  }finally{
+    btn.disabled = false; btn.textContent = 'Kirim File';
+  }
+}
+
+/* =========================================================
+   KUNCI MENU NAVIGASI
+   ========================================================= */
+function navUnlock(){
+  document.body.classList.remove('nav-locked');
+  try{ sessionStorage.setItem('tm_nav','open') }catch(e){}
+}
+function masukKasir(){ navUnlock(); go('kasir'); }
+(function initNavLock(){
+  let open = false;
+  try{ open = sessionStorage.getItem('tm_nav')==='open' }catch(e){}
+  if(open) document.body.classList.remove('nav-locked');
+  else document.body.classList.add('nav-locked');
+})();
+
+/* =========================================================
+   SINKRONISASI GOOGLE SHEETS
+   ========================================================= */
+let sheetOnline = false;
+let pushTimer = null;
+let antrianData = [];
+
+function num(v,d){ v = Number(v); return isFinite(v) ? v : (d||0); }
+function normalizeBarang(arr){
+  return (arr||[]).map(function(b,i){
+    return {
+      kode: String(b.kode||'').trim() || ('BRG'+i),
+      nama: String(b.nama||''),
+      kategori: String(b.kategori||'Minuman'),
+      harga: num(b.harga), stok: num(b.stok),
+      barcode: (b.barcode===0||b.barcode) ? String(b.barcode) : '',
+      tipeKode: String(b.tipeKode||'').toUpperCase()==='QR' ? 'QR' : 'BARCODE'
+    };
+  });
+}
+function normalizeTrx(arr){
+  return (arr||[]).map(function(t){
+    return { id:String(t.id||''), tanggal:String(t.tanggal||TODAY), total:num(t.total), jam:String(t.jam||'') };
+  });
+}
+function normalizeDetail(arr){
+  return (arr||[]).map(function(d){
+    return { id:num(d.id), id_transaksi:String(d.id_transaksi||''), kode_barang:String(d.kode_barang||''), jumlah:num(d.jumlah), harga:num(d.harga), subtotal:num(d.subtotal) };
+  });
+}
+function updateDbBadge(){
+  const el = document.getElementById('dbStatus');
+  if(!el) return;
+  el.classList.remove('on','off');
+  if(!SCRIPT_URL){ el.textContent='DB: Lokal'; el.title='Mode offline.'; return; }
+  if(sheetOnline){ el.classList.add('on'); el.textContent='DB: Sheets Online'; }
+  else{ el.classList.add('off'); el.textContent='DB: Sheets Terputus'; }
+}
+function sheetPush(){
+  if(!SCRIPT_URL) return;
+  clearTimeout(pushTimer);
+  pushTimer = setTimeout(function(){
+    fetch(SCRIPT_URL,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},
+      body:JSON.stringify({action:'setAll',barang:barang,transaksi:transaksi,detail:detailTransaksi})})
+      .then(function(r){ return r.json(); })
+      .then(function(res){ sheetOnline = !!(res && res.ok); updateDbBadge(); })
+      .catch(function(){ sheetOnline=false; updateDbBadge(); });
+  },700);
+}
+function sheetPull(cb){
+  if(!SCRIPT_URL){ cb && cb(false); return; }
+  fetch(SCRIPT_URL,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({action:'getAll'})})
+    .then(function(r){ return r.json(); })
+    .then(function(res){
+      if(res && res.ok){
+        const remoteEmpty = !(res.barang&&res.barang.length) && !(res.transaksi&&res.transaksi.length) && !(res.detail&&res.detail.length);
+        if(remoteEmpty){ sheetOnline = true; sheetPush(); }
+        else{
+          barang = normalizeBarang(res.barang);
+          transaksi = normalizeTrx(res.transaksi);
+          detailTransaksi = normalizeDetail(res.detail);
+          ensureCodes();
+          trxCounter = transaksi.reduce((m,t)=>Math.max(m,parseInt(String(t.id).replace(/\D/g,''))||0),0)+1;
+          sheetOnline = true; saveLocal();
+        }
+        cb && cb(true);
+      }else{ sheetOnline=false; cb && cb(false); }
+    })
+    .catch(function(){ sheetOnline=false; cb && cb(false); });
+}
+function refreshAll(){
+  renderKasirSelect(); renderCart(); renderHistory();
+  const act = (document.querySelector('.page.active')||{id:'page-beranda'}).id.replace('page-','');
+  if(act==='laporan') renderLaporan();
+  if(act==='dss') renderDSS();
+  if(act==='databarang') renderDataTable();
+  if(act==='profil') renderTeam();
+  if(act==='antrian') loadAntrian();
+}
+
+/* =========================================================
+   ANTRIAN PRINT
+   ========================================================= */
+function getPrintQrUrl(){
+  return location.origin + location.pathname + '?mode=print';
+}
+function copyPrintQr(){
+  const url = getPrintQrUrl();
+  if(navigator.clipboard){
+    navigator.clipboard.writeText(url).then(()=>toast('Link QR Print disalin: '+url));
+  }else{
+    prompt('Salin link ini untuk QR Print:', url);
+  }
+}
+async function loadAntrian(){
+  const list = document.getElementById('antrianList');
+  list.innerHTML = '<p style="color:var(--text-2);text-align:center;padding:1rem">Memuat antrian...</p>';
+  try{
+    if(SCRIPT_URL){
+      const res = await fetch(SCRIPT_URL,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({action:'getAntrian'})}).then(r=>r.json());
+      if(res && res.ok) antrianData = res.antrian || [];
+      else antrianData = load('tm_antrian') || [];
+    }else{
+      antrianData = load('tm_antrian') || [];
+    }
+    renderAntrian();
+  }catch(e){
+    antrianData = load('tm_antrian') || [];
+    renderAntrian();
+  }
+}
+function renderAntrian(){
+  const list = document.getElementById('antrianList');
+  const badge = document.getElementById('antrianBadge');
+  const waiting = antrianData.filter(a=>a.status==='Menunggu').length;
+  if(badge){
+    if(waiting>0){ badge.style.display='inline'; badge.textContent=waiting; }
+    else{ badge.style.display='none'; }
+  }
+  if(!antrianData.length){
+    list.innerHTML = '<p style="color:var(--text-2);text-align:center;padding:2rem">Belum ada file masuk. Tempel QR Print di toko agar pelanggan bisa mengirim file.</p>';
+    return;
+  }
+  const sorted = antrianData.slice().sort((a,b)=>{
+    const order = {'Menunggu':0,'Diproses':1,'Selesai':2,'Dibatalkan':3};
+    return (order[a.status]||9) - (order[b.status]||9);
+  });
+  list.innerHTML = sorted.map(a=>{
+    const cls = a.status==='Selesai'?'selesai':a.status==='Diproses'?'diproses':'';
+    const ext = (a.nama_file||'').split('.').pop().toUpperCase().substring(0,4);
+    const acts = a.url_drive
+      ? '<a class="btn btn-blue btn-sm" href="'+esc(a.url_drive)+'" target="_blank">Buka File</a>'
+      : (a.base64 ? '<a class="btn btn-blue btn-sm" href="data:'+(a.tipe_file||'application/octet-stream')+';base64,'+a.base64+'" download="'+esc(a.nama_file||'file')+'">Download</a>' : '<span style="font-size:.75rem;color:var(--text-2)">File tidak tersedia</span>');
+    return '<div class="print-card '+cls+'">'+
+      '<div class="print-ico">'+esc(ext)+'</div>'+
+      '<div class="print-info">'+
+        '<div class="fn">'+esc(a.nama_file||'-')+'</div>'+
+        '<div class="meta">'+esc(a.nama_pelanggan||'Pelanggan')+' - '+(a.tanggal||'')+' '+(a.jam||'')+' - '+(a.ukuran_kb||0)+' KB - Copy: '+(a.jumlah_copy||1)+'</div>'+
+        (a.catatan?'<div class="cat">Catatan: '+esc(a.catatan)+'</div>':'')+
+        '<div class="meta" style="font-family:monospace">ID: '+esc(a.id||'-')+'</div>'+
+      '</div>'+
+      '<div class="print-acts">'+
+        '<span class="status-pill status-'+(a.status||'Menunggu')+'">'+(a.status||'Menunggu')+'</span>'+
+        acts+
+        '<div style="display:flex;gap:.3rem;flex-wrap:wrap">'+
+          '<button class="btn btn-soft btn-sm" onclick="updateAntrianStatus(\''+esc(a.id)+'\',\'Diproses\')">Diproses</button>'+
+          '<button class="btn btn-blue btn-sm" onclick="updateAntrianStatus(\''+esc(a.id)+'\',\'Selesai\')">Selesai</button>'+
+          '<button class="btn btn-ghost btn-sm" onclick="updateAntrianStatus(\''+esc(a.id)+'\',\'Dibatalkan\')">Batal</button>'+
+        '</div>'+
+      '</div>'+
+    '</div>';
+  }).join('');
+}
+async function updateAntrianStatus(id,status){
+  try{
+    if(SCRIPT_URL){
+      const res = await fetch(SCRIPT_URL,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({action:'updateAntrian',id:id,status:status})}).then(r=>r.json());
+      if(res && res.ok){ toast('Status diperbarui: '+status); loadAntrian(); return; }
+    }
+    const arr = load('tm_antrian') || [];
+    const item = arr.find(x=>x.id===id);
+    if(item){ item.status = status; localStorage.setItem('tm_antrian', JSON.stringify(arr)); toast('Status diperbarui: '+status); loadAntrian(); }
+  }catch(e){ toast('Gagal update status','err'); }
+}
+
+/* =========================================================
+   KODE: BARCODE & QR
+   ========================================================= */
 function hashStr(s){ let h=0; for(let i=0;i<s.length;i++){ h=(h*31+s.charCodeAt(i))>>>0 } return h }
 function ean13(base12){
   let sum=0; for(let i=0;i<12;i++) sum += (+base12[i])*(i%2===0?1:3);
@@ -636,7 +999,9 @@ function ensureCodes(){
 }
 ensureCodes();
 
-/* ===================== RENDER KODE ===================== */
+/* =========================================================
+   RENDER KODE
+   ========================================================= */
 function drawBarcodes(scope){
   (scope||document).querySelectorAll('svg.bc').forEach(svg=>{
     const val = svg.dataset.bc;
@@ -644,11 +1009,9 @@ function drawBarcodes(scope){
     try{
       JsBarcode(svg,val,{
         format: svg.dataset.fmt || bcFormat(val),
-        width: +(svg.dataset.w||1.7),
-        height: +(svg.dataset.h||42),
+        width: +(svg.dataset.w||1.7), height: +(svg.dataset.h||42),
         displayValue: svg.dataset.dv !== '0',
-        fontSize: +(svg.dataset.fs||12),
-        font:'monospace', margin:2, background:'#FFFFFF',
+        fontSize: +(svg.dataset.fs||12), font:'monospace', margin:2, background:'#FFFFFF',
         lineColor: svg.dataset.pc==='1' ? '#000000' : (getComputedStyle(document.body).getPropertyValue('--bc').trim()||'#0A2540')
       });
     }catch(e){ svg.innerHTML='' }
@@ -685,7 +1048,9 @@ function codeHTML(b,o){
          '" data-w="'+(o.w||1.3)+'" data-fs="'+(o.fs||10)+'" data-dv="'+(o.dv===false?0:1)+'" '+(o.pc?'data-pc="1"':'')+'></svg>';
 }
 
-/* ===================== NAVIGASI & TEMA ===================== */
+/* =========================================================
+   NAVIGASI & TEMA
+   ========================================================= */
 function go(page){
   stopCam();
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
@@ -698,6 +1063,7 @@ function go(page){
   if(page==='dss') renderDSS();
   if(page==='databarang') renderDataTable();
   if(page==='profil') renderTeam();
+  if(page==='antrian') loadAntrian();
 }
 function toggleNav(){ document.getElementById('navLinks').classList.toggle('open') }
 function toggleTheme(){
@@ -727,7 +1093,9 @@ document.querySelectorAll('.overlay').forEach(o=>o.addEventListener('click',e=>{
   if(e.target===o){ if(o.id==='scanModal') stopCam(); o.classList.remove('on') }
 }));
 
-/* ===================== KAMERA ===================== */
+/* =========================================================
+   KAMERA
+   ========================================================= */
 let camScanner = null, camFacing = 'environment';
 const CAM_FORMATS = ['QR_CODE','EAN_13','EAN_8','CODE_128','CODE_39','CODE_93','UPC_A','UPC_E','ITF','DATA_MATRIX'];
 function openCamera(){
@@ -739,7 +1107,7 @@ function startCam(){
   const errEl = document.getElementById('camErr');
   errEl.textContent='';
   stopCam();
-  if(typeof Html5Qrcode === 'undefined'){ errEl.textContent='Pustaka pemindai gagal dimuat. Periksa koneksi internet lalu muat ulang halaman.'; return }
+  if(typeof Html5Qrcode === 'undefined'){ errEl.textContent='Pustaka pemindai gagal dimuat.'; return }
   document.getElementById('reader').innerHTML='';
   try{
     const fmt = CAM_FORMATS.filter(f=>Html5QrcodeSupportedFormats[f]!==undefined).map(f=>Html5QrcodeSupportedFormats[f]);
@@ -748,10 +1116,18 @@ function startCam(){
   camScanner.start({facingMode:camFacing},{fps:10,qrbox:{width:250,height:160},disableFlip:false},onCamSuccess,function(){})
   .catch(function(err){
     camScanner=null;
-    errEl.textContent='Kamera tidak dapat diakses. Izinkan akses kamera pada browser, atau gunakan https / localhost. Detail: '+err;
+    errEl.textContent='Kamera tidak dapat diakses. Izinkan akses kamera, atau gunakan https / localhost.';
   });
 }
-function onCamSuccess(t){ stopCam(); document.getElementById('scanModal').classList.remove('on'); document.getElementById('scanInput').value=t; scanAdd() }
+function onCamSuccess(t){
+  stopCam();
+  document.getElementById('scanModal').classList.remove('on');
+  if(String(t).includes('mode=print')){
+    window.location.href = t;
+    return;
+  }
+  document.getElementById('scanInput').value=t; scanAdd();
+}
 function stopCam(){
   if(!camScanner) return;
   const s=camScanner; camScanner=null;
@@ -760,7 +1136,9 @@ function stopCam(){
 function switchCam(){ camFacing = (camFacing==='environment')?'user':'environment'; startCam() }
 window.addEventListener('beforeunload', stopCam);
 
-/* ===================== KASIR ===================== */
+/* =========================================================
+   KASIR
+   ========================================================= */
 function renderKasirSelect(){
   document.getElementById('kasirBarang').innerHTML =
     '<option value="">Pilih Barang (manual)</option>' +
@@ -855,7 +1233,9 @@ function renderHistory(){
   }).join('') : '<p style="color:var(--text-2);text-align:center;padding:2rem">Belum ada transaksi hari ini.</p>';
 }
 
-/* ===================== CETAK LABEL ===================== */
+/* =========================================================
+   CETAK LABEL
+   ========================================================= */
 function openPrint(html,title){
   document.getElementById('printArea').innerHTML = html;
   document.getElementById('printTitle').textContent = title;
@@ -886,7 +1266,9 @@ function printAllLabels(){
     'Cetak Semua Label');
 }
 
-/* ===================== LAPORAN & RESET ===================== */
+/* =========================================================
+   LAPORAN & RESET
+   ========================================================= */
 let chartObj = null;
 function reportData(){
   const today = transaksi.filter(t=>t.tanggal===TODAY);
@@ -927,16 +1309,11 @@ function renderLaporan(){
         y:{ticks:{color:tc,callback:v=>'Rp '+v.toLocaleString('id-ID')},grid:{color:gc},beginAtZero:true}}}
   });
 }
-/* Tombol Reset: menghapus laporan harian yang sudah ada sehingga laporan mulai dari awal */
 function resetLaporan(){
   if(!transaksi.length && !detailTransaksi.length){ toast('Laporan harian sudah kosong','err'); return }
-  if(confirm('Reset laporan harian? Seluruh laporan yang sudah ada akan dihapus dan pencatatan laporan dimulai dari awal.')){
-    transaksi = [];
-    detailTransaksi = [];
-    trxCounter = 1;
-    save();
-    renderLaporan();
-    renderHistory();
+  if(confirm('Reset laporan harian? Seluruh laporan yang sudah ada akan dihapus dan pencatatan dimulai dari awal.')){
+    transaksi = []; detailTransaksi = []; trxCounter = 1;
+    save(); renderLaporan(); renderHistory();
     toast('Laporan harian direset. Pencatatan dimulai dari awal.');
   }
 }
@@ -955,7 +1332,9 @@ function exportCSV(){
   toast('File CSV berhasil diunduh');
 }
 
-/* ===================== DSS ===================== */
+/* =========================================================
+   DSS
+   ========================================================= */
 function renderDSS(){
   const sold = {};
   detailTransaksi.forEach(d=>{ sold[d.kode_barang]=(sold[d.kode_barang]||0)+d.jumlah });
@@ -986,7 +1365,9 @@ function renderDSS(){
     : '<p style="color:var(--text-2);font-size:.9rem">Tidak ada rekomendasi restock saat ini.</p>';
 }
 
-/* ===================== DATA BARANG ===================== */
+/* =========================================================
+   DATA BARANG
+   ========================================================= */
 function renderDataTable(){
   document.getElementById('dataTableBody').innerHTML = barang.map((b,i)=>{
     const cls = b.kategori==='Jasa' ? 's-ok' : (b.stok===0?'s-out':b.stok<=10?'s-low':'s-ok');
@@ -1101,7 +1482,9 @@ function resetData(){
   }
 }
 
-/* ===================== PROFIL ===================== */
+/* =========================================================
+   PROFIL
+   ========================================================= */
 function renderTeam(){
   document.getElementById('teamGrid').innerHTML = TEAM.map(m=>{
     const ini = m.nama.split(' ').filter(w=>w.length>1).map(w=>w[0]).join('').substring(0,2).toUpperCase();
@@ -1114,12 +1497,23 @@ function renderTeam(){
   }).join('');
 }
 
-/* ===================== INIT ===================== */
-save();
+/* =========================================================
+   INIT
+   ========================================================= */
+saveLocal();
 renderTeam();
 renderKasirSelect();
 renderCart();
 renderHistory();
+updateDbBadge();
+sheetPull(function(ok){
+  if(SCRIPT_URL){
+    if(ok) toast('Terhubung ke Google Sheets: data dimuat dari database online.');
+    else toast('Gagal menghubungi Google Sheets: memakai data lokal sementara.','err');
+  }
+  refreshAll();
+  updateDbBadge();
+});
 </script>
 </body>
 </html>
